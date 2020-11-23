@@ -1,0 +1,53 @@
+%! Compiler = xelatex
+%! Author = Andrew Selvia
+%! Date = 2020.10.8
+
+% Preamble
+\documentclass[11pt]{article}
+
+% Use SF Pro Text per https://latex.org/forum/viewtopic.php?t=33196 & https://gist.github.com/Pni0/2923266
+\usepackage{fontspec}
+\setmainfont{SF Pro Text}
+\usepackage{sfmath}
+\everymath={\textsf{}}
+
+\usepackage{hyperref}
+\hypersetup{
+colorlinks=true,
+filecolor=magenta,
+linkcolor=blue,
+urlcolor=cyan
+}
+\usepackage{enumitem}
+
+\begin{document}
+    \begin{itemize}
+        \item Title: \(E_{in-style}\)
+        \item Team:
+        \begin{itemize}
+            \item Charlie Brayton (014559415)
+            \item Mohit Patel (014501461)
+            \item Andrew Selvia (014547273)
+            \item Dylan Zhang (013073437)
+        \end{itemize}
+        \item Data: \href{https://github.com/zalandoresearch/fashion-mnist\#get-the-data}{fashion-mnist}
+        \item Idea:
+        Put simply, we intend to classify and augment pictures of clothing items.
+        Specifically, we will leverage the fashion-mnist dataset to explore various machine learning topics: multi-class classification, supervised learning, and generative adversarial networks (GANs).
+        Luckily, we will be able to build upon prior work by many researchers to catalyze our own research.
+
+        For instance:
+        \begin{itemize}
+            \item Students like us across the world have used fashion-mnist to gain experience with classification and clustering (such as \href{https://cnedwards.com/files/Edwards_Yen_Final_Project.pdf}{this student paper from the University of Tennessee, Knoxville}).
+            \item At the same time, professional researchers at Google Brain have used fashion-mnist to explore various GANs in \href{https://arxiv.org/abs/1711.10337}{Are GANs Created Equal? A Large-Scale Study}.
+            \item Finally, fashion-mnist has been used to demonstrate \href{https://arxiv.org/pdf/1710.10766.pdf}{resiliency against adversarial input} which has important ramifications for the trustworthiness of ML solutions as they slowly seep into every crevice of modern life.
+        \end{itemize}
+
+        Initially, our focus will be on acclimating ourselves to the dataset and techniques employed in existing classification papers.
+        We each intend to independently survey one classification algorithm and share with the group.
+        Assuming we find success, we then plan to split up based on topical interest.
+        Dylan and Mohit have expressed interest in using ML to add color to the grayscale images in the fashion-mnist dataset.
+        Andrew and Charlie have expressed interest in exploring GANs and adversarial input defense strategies.
+        We may attempt to utilize the SJSU HPC system, especially if it offers GPUs capable of running our experiments.
+    \end{itemize}
+\end{document}
