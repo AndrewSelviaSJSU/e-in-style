@@ -70,6 +70,8 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     Here is an example of how we should reference our figures~\autoref{fig:loss-and-accuracy}.
 
+    Here is an example with multiple images~\autoref{fig:results1}
+
     \begin{figure}
         \caption{Loss and Accuracy}
         \label{fig:loss-and-accuracy}
@@ -208,6 +210,15 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
                 \legend{Training Loss, Training Accuracy, Validation Loss, Validation Accuracy, Testing Loss, Testing Accuracy}
             \end{axis}
         \end{tikzpicture}
+    \end{figure}
+
+    \begin{figure}
+        \caption{ACGAN Learning to Generate Clothing Images}
+        \label{fig:results1}
+        \centering
+        \subfloat[\centering Epoch 1]{{\includegraphics[width=2.5cm]{ACGAN_epoch001.png} }}
+        \subfloat[\centering Epoch 25]{{\includegraphics[width=2.5cm]{ACGAN_epoch025.png} }}
+        \subfloat[\centering Epoch 50]{{\includegraphics[width=2.5cm]{ACGAN_epoch050.png} }}
     \end{figure}
 
     \section{Conclusion}\label{sec:conclusion}
