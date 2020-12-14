@@ -86,11 +86,16 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
         \item Shirt
         \item Sneaker
         \item Bag
+        \item Ankle Boot
     \end{enumerate}
 
     \section{Implementation}\label{sec:implementation}
 
     \subsection{Classification}\label{subsec:implementation-classification}
+    
+    Classification was performed using two neural network architectures, one using only dense layers and another using convolutional layers. The first architecture, shown in Fig~\ref{figclass1}, flattens the 28 by 28 pixel image into a vector 784 pixels long, which is then densely connected to a 128 node layer; finallly, the 128 node layer is densely connected to a 10 node output layer. The second architecture, shown in Fig~\ref{figclass2}, scans the image with a convolutional neural network using a 5 by 5 window and 64 layers; the results of the first convolutional layer are then scanned by another convolutional layer with a 5 by 5 window and 128 layers. The final step is to flatten the layer and densely connect it to the 10 node output layer. The output layer of both architectures indicates the networks confidence that the image belongs to each of the classes, so a large value in 0th node and the 6th node would indicate that the network is uncertain whether an image should be classified as a T-shirt/top or just a Shirt. The neural networks described were constructed using Keras and Tensorflow in python notebooks.
+    
+    The robustness of the classifier was tested by adding adversarial signals to the input images. The adversarial signal was calculated by determining the gradient of the loss function based on the input image used. This allows the adversarial signal to skew the image to the closest incorrect classification. Once the adversarial signal was determined it was scaled by an epislon value (between 0 and 1) and added to the image; for adding this noise the image is considered to be all pixels that have a brightness value greater than 0. Limiting the noise to non-zero values means the classification isn't being skewed due to noise added in the black background portions of the image. Robustness was determined by comparing the accuracy of our classifiers against ever increasing epsilon values.
 
     \subsection{Generation}\label{subsec:implementation-generation}
 
@@ -117,6 +122,8 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
     \section{Results}\label{sec:results}
 
     \subsection{Classification}\label{subsec:results-classification}
+    
+    
 
     \subsection{Generation}\label{subsec:results-generation}
 
