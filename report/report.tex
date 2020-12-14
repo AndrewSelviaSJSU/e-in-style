@@ -97,6 +97,22 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
     https://github.com/AndrewSelviaSJSU/pytorch-generative-model-collections
 
     \subsection{Colorization}\label{subsec:implementation-colorization}
+	
+	The images in the fashion mnist dataset are all grayscale images. We decided to build a machine learning model that would fill colors into these black and white images intelligently. There were several techniques available to explicitly fill colors into the grayscale images. However, in order to smartly colorize the fashion mnist dataset we decided that Generative Adversarial Networks were the best choice for this task. 
+
+	To build a model capable of smartly colorizing grayscale images we had to first build a dataset for training our GAN model. For this we combined the training and testing sets of the fashion mnist dataset. After this, we explicitly filled colors into these 70,000 grayscale images. Initially, the shape of each image was (28,28,1). After colorizing the images, their shape changed to (28,28,3). This marked the addition of 3 rows for each item in the dataset. This change happened to store the values of the red, blue and green elements of each image. Each label of the fashion mnist dataset was assigned different colors, for instance, ankle boots were colored brown and dresses were colored red. Now, we had 70,000 data instances each representing a colored fashion item from the fashion mnist dataset of the shape (28,28,3).
+
+    
+	\begin{figure}[!h]
+	\begin{center}
+	\caption{Training samples for colorization}
+	\includegraphics[scale = 0.33]{Colorization_training_samples.png}
+	\end{center}
+	\end{figure}
+
+	Once we had built our training samples, we decided to work on our GAN. We fed the generator in the network the original grayscale images from the fashion mnist dataset. The generator then tried to fill colors into these grayscale images of fashion items using some randomly set weights. These generated images were then passed on to the discriminator. Along with these images, the discriminator also received the explicitly colored images from the training sample. The discriminator tried to identify which image was created from the generator and which was drawn from the training sample. Based on the decision made on the classification task by the discriminator, the discriminator loss as well as the generator loss were computed. 
+
+	The discriminator in the network learnt from the discriminator loss by backpropagating through the discriminator node and updating the weights associated with the discriminator. Similarly, the generator updated its weights using the results obtained from backpropagating through the generator node and using the generator loss. This process of updating the weights and learning was carried out iteratively. After running this iterative process for certain epochs, we had the final weights for the network that were capable of colorizing the items in the fashion mnist dataset intelligently. 
 
     \section{Results}\label{sec:results}
 
