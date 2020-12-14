@@ -48,6 +48,9 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
     \maketitle
 
     \begin{abstract}
+
+        The primary objective of this research is to classify and generate images of clothing items.\ The work is a compilation of three distinct efforts: (1) to classify fashion-mnist images and, inversely, fool it with adversarial noise; (2) to generate novel images which emulate the true fashion-mnist images;\ (3) to infuse the grayscale images with life-like colors.\ Together, these endeavours pushed the team to explore topics at the forefront of modern machine learning, most notably generative adversarial networks (GANs).
+
     \end{abstract}
 
     \begin{IEEEkeywords}
@@ -55,14 +58,62 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
     \end{IEEEkeywords}
 
     \section{Introduction}\label{sec:introduction}
+
+    The diverse branches of this project were made possible by the careful selection of a dataset.\ The fashion-mnist dataset was chosen specifically for its prevalence as a benchmark in recent research into neural networks.\ Its size, labels, and compatibility (with the long-established MNIST dataset) make it an ideal choice for evaluating deep neural networks (NNs) and GANs. Rather than attempt to introduce a truly groundbreaking NN architecture given the authors' limited experience, this project aims for breadth.
+
+    Each subproject explores a unique research area with industrial applications which may answer the associated questions:
+
+    \begin{enumerate}
+        \item Classification: Can we quickly identify an item of clothing to automate sorting and retrieval?\ Supposing such an automated system existed, how susceptible might it be to failure?
+        \item Generation: Can the product development lifecycle for clothing be accelerated by avoiding physical prototyping?
+        \item Colorization: Can grayscale clothing imagery be augmented with colors to enable A/B testing of styles to increase customer satisfaction?
+    \end{enumerate}
+
+    To aid comprehension, each subproject is explored independently.
+
+    \section{Data}\label{sec:data}
+
+    The fashion-mnist dataset is composed of 60,000 training images and 10,000 testing images.\ In keeping with the legacy of the traditional MNIST, fashion-mnist images are 28x28 grayscale pixels.\ Each image is labeled as one of the ten classes enumerated below:
+
+    \begin{enumerate}
+        \setcounter{enumi}{-1}
+        \item T-shirt/top
+        \item Trouser
+        \item Pullover
+        \item Dress
+        \item Coat
+        \item Sandal
+        \item Shirt
+        \item Sneaker
+        \item Bag
+    \end{enumerate}
+
     \section{Implementation}\label{sec:implementation}
-    \subsection{Code}\label{subsec:code}
-    \subsection{Data}\label{subsec:data}
-    \subsection{Pre-processing}\label{subsec:pre-processing}
-    \subsection{Training}\label{subsec:training}
-    \subsection{Testing}\label{subsec:testing}
-    \subsection{Post-processing}\label{subsec:post-processing}
+
+    \subsection{Classification}\label{subsec:implementation-classification}
+
+    \subsection{Generation}\label{subsec:implementation-generation}
+
+    https://github.com/AndrewSelviaSJSU/pytorch-generative-model-collections
+
+    \subsection{Colorization}\label{subsec:implementation-colorization}
+
     \section{Results}\label{sec:results}
+
+    \subsection{Classification}\label{subsec:results-classification}
+
+    \subsection{Generation}\label{subsec:results-generation}
+
+    \begin{figure}
+        \caption{ACGAN Learning to Generate Clothing Images}
+        \label{fig:results1}
+        \centering
+        \subfloat[\centering Epoch 1]{{\includegraphics[width=2.5cm]{ACGAN_epoch001.png} }}
+        \subfloat[\centering Epoch 25]{{\includegraphics[width=2.5cm]{ACGAN_epoch025.png} }}
+        \subfloat[\centering Epoch 50]{{\includegraphics[width=2.5cm]{ACGAN_epoch050.png} }}
+    \end{figure}
+
+    \subsection{Colorization}\label{subsec:results-colorization}
 
     Here is an example of how we should cite our references~\cite{e-in-style}.
 
@@ -212,16 +263,8 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
         \end{tikzpicture}
     \end{figure}
 
-    \begin{figure}
-        \caption{ACGAN Learning to Generate Clothing Images}
-        \label{fig:results1}
-        \centering
-        \subfloat[\centering Epoch 1]{{\includegraphics[width=2.5cm]{ACGAN_epoch001.png} }}
-        \subfloat[\centering Epoch 25]{{\includegraphics[width=2.5cm]{ACGAN_epoch025.png} }}
-        \subfloat[\centering Epoch 50]{{\includegraphics[width=2.5cm]{ACGAN_epoch050.png} }}
-    \end{figure}
-
     \section{Conclusion}\label{sec:conclusion}
+
     \bibliographystyle{ieeetr}
     \bibliography{report}
 \end{document}
