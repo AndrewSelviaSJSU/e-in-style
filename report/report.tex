@@ -133,7 +133,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     The images in the fashion mnist dataset are all grayscale images.\ We decided to build a machine learning model that would fill colors into these black and white images intelligently.\ There were several techniques available to explicitly fill colors into the grayscale images.\ However, in order to smartly colorize the fashion mnist dataset we decided that Generative Adversarial Networks were the best choice for this task.
 
-    To build a model capable of smartly colorizing grayscale images we had to first build a dataset for training our GAN model.\ For this we combined the training and testing sets of the fashion mnist dataset.\ After this, we explicitly filled colors into these 70,000 grayscale images.\ Initially, the shape of each image was (28,28,1).\ After colorizing the images, their shape changed to (28,28,3).\ This marked the addition of 3 rows for each item in the dataset.\ This change happened to store the values of the red, blue and green elements of each image.\ Each label of the fashion mnist dataset was assigned different colors, for instance, ankle boots were colored brown and dresses were colored red.\ Now, we had 70,000 data instances each representing a colored fashion item from the fashion mnist dataset of the shape (28,28,3).
+    To build a model capable of smartly colorizing grayscale images we had to first build a dataset for training our GAN model.\ For this we combined the training and testing sets of the fashion mnist dataset.\ After this, we explicitly filled colors into these 70,000 grayscale images.\ Initially, the shape of each image was (28,28,1).\ After colorizing the images, their shape changed to (28,28,3).\ This marked the addition of 3 rows for each item in the dataset.\ This change happened to store the values of the red, blue and green elements of each image.\ Each label of the fashion mnist dataset was assigned different colors, for instance, ankle boots were colored brown and dresses were colored red.\ Now, we had 70,000 data instances each representing a colored fashion item from the fashion mnist dataset of the shape (28,28,3). Some instances of the explicitly colored training samples can be seen in \autoref{fig:colorization}.
 
     \begin{figure}
         \caption{Training samples for colorization}
@@ -142,11 +142,30 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
         \includegraphics[scale = 0.33]{Colorization_training_samples.png}
     \end{figure}
 
-    TODO: Reference \autoref{fig:colorization}.
-
     Once we had built our training samples, we decided to work on our GAN. We fed the generator in the network the original grayscale images from the fashion mnist dataset.\ The generator then tried to fill colors into these grayscale images of fashion items using some randomly set weights.\ These generated images were then passed on to the discriminator.\ Along with these images, the discriminator also received the explicitly colored images from the training sample.\ The discriminator tried to identify which image was created from the generator and which was drawn from the training sample.\ Based on the decision made on the classification task by the discriminator, the discriminator loss as well as the generator loss were computed.
 
     The discriminator in the network learnt from the discriminator loss by backpropagating through the discriminator node and updating the weights associated with the discriminator.\ Similarly, the generator updated its weights using the results obtained from backpropagating through the generator node and using the generator loss.\ This process of updating the weights and learning was carried out iteratively.\ After running this iterative process for certain epochs, we had the final weights for the network that were capable of colorizing the items in the fashion mnist dataset intelligently.
+    
+    We used DCGANs to define the neural network model.\ The DCGANs architecture displayed in \autoref{fig:dcgan-architecture} gives a low level overview of the model used for colorizing the grayscale images of the fashion mnist dataset. It introduces the generators and discriminators along with the training process step by step.
+
+    \begin{figure}
+        \caption{DCGAN Architecture}
+        \label{fig:dcgan-architecture}
+        \includegraphics[width=9cm]{architecture.png}
+        \centering
+    \end{figure}
+
+     DCGANs use a random noise vector as input, and the input is then scaled up into two-dimensional data similar to CNN's but in the opposite structure.\ For non-linear layers, we recommend using LeakyReLU for all layers for the discriminator. For the generator, we found that the BatchNormalize layer was the optimal choice, primarily because using BatchNormalize allows the CNN version of the generator to learn better, but it is impossible to use BatchNormalize for all layers.\ The output layer of the generator and the input layer of the discriminator do not require to add BatchNormalize layer.\ 
+
+    Parameter setting for our project:
+
+    \begin{itemize}
+        \item batch size: 64
+        \item Used Adam optimizer instead of Root Mean Square Propagation optimizer
+        \item iteration times: 20000
+        \item learning rate: 0.0001
+        \item BatchNormalization: momentum=0.9
+    \end{itemize}
 
     \section{Results}\label{sec:results}
 
@@ -216,68 +235,21 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     \subsection{Colorization}\label{subsec:results-colorization}
 
-    We used DCGANs to define the neural network model.\ The DCGANs architecture displays how it worked when we were using it for It introduces the generators and discriminators as well as the training process step by step.
-
-    \begin{figure}
-        \caption{DCGANs Architecture}
-        \label{fig:dcgan-architecture}
-        \includegraphics[width=9cm]{architecture.png}
-        \centering
-    \end{figure}
-
-    We briefly summarize the generating principles of DCGANs for our dataset by improving and optimizing the Fashion-MNIST dataset, and then step by step introducing the generator and discriminator and the training process.\ DCGANs use a random noise vector as an input, and then the input is scaled up into two-dimensional data similar to CNN's but in the opposite structure.\ For non-linear layers, we recommend using LeakyReLU for all layers for the discriminator, and our results in the discriminator function can be seen below.
-
-    \begin{figure}
-        \caption{The result of Discriminator}
-        \label{fig:discriminator}
-        \includegraphics[width=9cm]{discriminator.png}
-        \centering
-    \end{figure}
-
-    For the generator, we recommend using the BatchNormalize layer because using BatchNormalize allows the CNN version of the generator to learn better, but it is impossible to use BatchNormalize for all layers.\ The output layer of the generator and the input layer of the discriminator do not require to add BatchNormalize layer.\ Our result in the generator function can be seen below.
-
-    \begin{figure}
-        \caption{The result of Generator}
-        \label{fig:generator}
-        \includegraphics[width=9cm]{generator.png}
-    \end{figure}
-
-    The size of non-trainable parameters in Adam optimizer was larger than RMSprop.\ This result excludes all parameters of the discriminator.\ We want to use Adam optimizer in our project.
-
-    \begin{figure}
-        \caption{The result of Adam}
-        \label{fig:adam}
-        \includegraphics[width=9cm]{Adam.png}
-    \end{figure}
-
-    \begin{figure}
-        \caption{The result of RMSprop}
-        \label{fig:rmsprop}
-        \includegraphics[width=9cm]{RMSprop.png}
-    \end{figure}
-
-    TODO: Reference \autoref{fig:results1}.
-    TODO: Reference \autoref{fig:dcgan-architecture}.
-    TODO: Reference \autoref{fig:discriminator}.
-    TODO: Reference \autoref{fig:generator}.
-    TODO: Reference \autoref{fig:adam}.
-    TODO: Reference \autoref{fig:rmsprop}.
     TODO: Cite~\cite{e-in-style}.
     TODO: Cite~\cite{pytorch-generative-model-collections}.
 
-    With this structure of the generative model and the discriminant model of the CNN structure, DCGANs can achieve considerable results in image generation.
+    With the structure of the generative model and the discriminant model of the CNN structure provided in \autoref{fig:dcgan-architecture} and training samples similar to \autoref{fig:colorization}, the results achieved by our model can be seen in \autoref{fig:colorized_result}.
 
-    Parameter setting in our project:
+    \begin{figure}
+        \caption{GAN colorized Clothing Images}
+        \label{fig:colorized_result}
+        \includegraphics[width=9cm]{learned_result.png}
+        \centering
+    \end{figure}
 
-    \begin{itemize}
-        \item batch size: 64
-        \item Used Adam optimizer instead of Root Mean Square Propagation optimizer
-        \item iteration times: 20000
-        \item learning rate: 0.0001
-        \item BatchNormalization: momentum=0.9
-    \end{itemize}
-
-    In our project, we used DCGANs to generate colorful clothes, and you can try to change the dataset to generate images that your personal needs or try to modify the neural network parameters to observe different generation effects.\ It should be noted that the generated images are not as good as the black and white examples, mainly due to the difficulty in setting up the training set.\ We tried replacing too many background images and then using this new dataset, the generator must generate clothing and have a valid background (retrieved from real images).\ With more training or some special techniques, you may be able to improve these generated images.\ However, since this is one way to use GAN to adapt to RGB images, we are delighted with the results.
+     It can be clearly seen that the generated images are not as good as the black and white examples, mainly due to the difficulty in setting up the training set.\ We tried replacing too many background images and ended up using this new dataset. The generator must generate clothing images and have a valid background (retrieved from real images).\ With more training, additional training samples or some special techniques, one might be able to improve the generated images.\ However, since this is one way to use GAN to adapt to RGB images, we are delighted with the results.
+    
+    For our project, we have used DCGAN to generate colorful clothing images. One can try to change the dataset to generate images that suits their personal need, or try to modify the neural network parameters to observe different generation effects. The size of non-trainable parameters in Adam optimizer was larger than RMSprop.\ This result excludes all parameters of the discriminator.\ 
 
     \section{Conclusion}\label{sec:conclusion}
 
