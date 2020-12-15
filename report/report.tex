@@ -2,7 +2,7 @@
 \documentclass[conference]{IEEEtran}
 \usepackage{cite}
 %\usepackage{amsmath,amssymb,amsfonts}
-\usepackage{algorithmicx}
+\usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
@@ -11,7 +11,6 @@
 \usepackage[hidelinks]{hyperref}
 \graphicspath{ {images/} }
 \usepackage{pgfplots}
-\usepackage{tikz}
 \pgfplotsset{compat=1.17}
 
 \newcommand\BibTeX{{\textrm{B} \kern-.05em{\textsc{i} \kern-.025em b}\kern-.08em
@@ -19,7 +18,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
 \begin{document}
 
-    \title{E\textsubscript{in-style}: Clothing Item Generation using GANs}
+    \title{Clothing Item Generation using GANs}
 
     \author{\IEEEauthorblockN{Charlie Brayton (014559415)}
     \IEEEauthorblockA{\textit{Department of Software Engineering} \\
@@ -93,167 +92,225 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
     \section{Implementation}\label{sec:implementation}
 
     \subsection{Classification}\label{subsec:implementation-classification}
-
-    Classification was performed using two neural network architectures, one using only dense layers and another using convolutional layers.\ The first architecture, shown in~\autoref{fig:classification-1}, flattens the 28 by 28 pixel image into a vector 784 pixels long, which is then densely connected to a 128 node layer;\ finally, the 128 node layer is densely connected to a 10 node output layer.\ The second architecture, shown in~\autoref{fig:classification-2}, scans the image with a convolutional neural network using a 5 by 5 window and 64 layers;\ the results of the first convolutional layer are then scanned by another convolutional layer with a 5 by 5 window and 128 layers.\ The final step is to flatten the layer and densely connect it to the 10 node output layer.\ The output layer of both architectures indicates the network's confidence that the image belongs to each of the classes, so a large value in \(0^{th}\) node and the 6th node would indicate that the network is uncertain whether an image should be classified as a T-shirt/top or just a Shirt.\ The neural networks described were constructed using Keras and Tensorflow in python notebooks.
-
-    The robustness of the classifier was tested by adding adversarial signals to the input images.\ The adversarial signal was calculated by determining the gradient of the loss function based on the input image used.\ This allows the adversarial signal to skew the image to the closest incorrect classification.\ Once the adversarial signal was determined, it was scaled by an epsilon value (between 0 and 1) and added to the image;\ for adding this noise the image is considered to be all pixels that have a brightness value greater than 0.\ Limiting the noise to non-zero values means the classification isn't being skewed due to noise added in the black background portions of the image.\ Robustness was determined by comparing the accuracy of our classifiers against ever-increasing epsilon values.
-
-    \begin{figure}
-        \caption{}
-        \label{fig:classification-1}
+    
+    Classification was performed using two neural network architectures, one using only dense layers and another using convolutional layers. The first architecture, shown in Fig~\ref{figclass1}, flattens the 28 by 28 pixel image into a vector 784 pixels long, which is then densely connected to a 128 node layer; finallly, the 128 node layer is densely connected to a 10 node output layer.
+    \begin{figure}[!h]
+    \begin{center}
+    \caption{First classifier architecture}
+    \includegraphics[width=0.5\textwidth]{First_Classifier_Architecture.png}
+    \label{figclass1}
+    \end{center}
     \end{figure}
-
-    \begin{figure}
-        \caption{}
-        \label{fig:classification-2}
+    The second architecture, shown in Fig~\ref{figclass2}, scans the image with a convolutional neural network using a 5 by 5 window and 64 layers; the results of the first convolutional layer are then scanned by another convolutional layer with a 5 by 5 window and 128 layers. The final step is to flatten the layer and densely connect it to the 10 node output layer.
+    \begin{figure}[!h]
+    \begin{center}
+    \caption{Second classifier architecture}
+    \includegraphics[width=0.5\textwidth]{Second_Classifier_Architecture.png}
+    \label{figclass2}
+    \end{center}
     \end{figure}
+The output layer of both architectures indicates the networks confidence that the image belongs to each of the classes, so a large value in 0th node and the 6th node would indicate that the network is uncertain whether an image should be classified as a T-shirt/top or just a Shirt. The neural networks described were constructed using Keras and Tensorflow in python notebooks.
+    
+    The robustness of the classifier was tested by adding adversarial signals to the input images. The adversarial signal was calculated by determining the gradient of the loss function based on the input image used. This allows the adversarial signal to skew the image to the closest incorrect classification. Once the adversarial signal was determined it was scaled by an epislon value (between 0 and 1) and added to the image; for adding this noise the image is considered to be all pixels that have a brightness value greater than 0. Limiting the noise to non-zero values means the classification isn't being skewed due to noise added in the black background portions of the image. Robustness was determined by comparing the accuracy of our classifiers against ever increasing epsilon values.
 
     \subsection{Generation}\label{subsec:implementation-generation}
 
-    A key goal from the onset of this project was to use GANs to generate images which are believable reproductions of those in fashion-mnist.\ During the planning stage, various projects which achieved the goal were identified as references.\ Two stood out above the rest: tensorflow-generative-model-collections~\cite{tensorflow-generative-model-collections} and pytorch-generative-model-collections~\cite{original-pytorch-generative-model-collections}.\ Both take the same approach of training ten different GANs on various datasets, including fashion-mnist.\ The PyTorch implementation proved easier to execute on the SJSU HPC due to its more modern dependency stack, therefore it was chosen as the foundation of the generative component of this project.
-
-    The ten GANs explored for this project were:
-
-    \begin{enumerate}
-        \item Generative Adversarial Network (GAN; June 2014)~\cite{goodfellow2014generative}: The original GAN paper by Goodfellow, et al.\ introduced the world to the idea of training competing deep networks to improve generative models.
-        \item Conditional GAN (CGAN; November 2014)~\cite{mirza2014conditional}: Followed an idea posed at the end of the original GAN paper to see how GANs might be used to fulfill conditional constraints such that the generated samples targeted a specific output class.
-        \item Information Maximizing GAN (infoGAN; June 2016)~\cite{chen2016infogan}: Maximizes mutual information during training to learn features without supervision which can be tuned to alter characteristics of the generated models (i.e.\ shifting the angle of MNIST--like digits).
-        \item Energy-based GAN (EBGAN; March 2017)~\cite{zhao2017energybased}: An energy-based approach to GANs that yielded promising results for high-resolution images.
-        \item Auxiliary Classifier GAN (ACGAN; July 2017)~\cite{odena2017conditional}: Trains the generator to generate a classifier for each sample it produces, eventually proving GANs can learn over numerous diverse classes with high-resolution images.\ It achieves especially impressive results on ImageNet.
-        \item Least Squares GAN (LSGAN; April 2017)~\cite{mao2017squares}: Swaps out the sigmoid cross entropy loss function for the least squares loss function to avoid vanishing gradients, thereby forcing the generator to produce higher quality images.
-        \item Wasserstein GAN (WGAN; January 2017)~\cite{arjovsky2017wasserstein}: A theoretically-dense paper which introduces the critic into the standard game between a generator and discriminator to achieve more durable training and avoid mode collapse.
-        \item Boundary Equilibrium GAN (BEGAN; May 2017)~\cite{berthelot2017began}: Stabilizes training via an equilibrium, but more interestingly, explores the inverse relationship between diversity of generated images (modality) and image quality.
-        \item Wasserstein GAN - Gradient Penalty (WGAN\_GP; December 2017)~\cite{gulrajani2017improved}: Enables training deeper, more complicated networks than previously possible by removing critic weight clipping from WGAN in favor of gradient penalties.
-        \item Deep Regret Analytic GAN (DRAGAN; December 2017)~\cite{kodali2017convergence}: Calls into question the assumption that modality and quality are inversely correlated.
-    \end{enumerate}
-
-    Each was trained independently on the fashion-mnist dataset for fifty epochs.\ The loss metric was tracked for each training session.\ To communicate the results of the training process more coherently, a snapshot of images produced by the generator is saved at the end of each epoch as demonstrated in \autoref{fig:results1}.\ Upon completion, each set of fifty images was compiled into a GIF to further streamline communication of the learning process.
+    https://github.com/AndrewSelviaSJSU/pytorch-generative-model-collections
 
     \subsection{Colorization}\label{subsec:implementation-colorization}
+	
+	The images in the fashion mnist dataset are all grayscale images. We decided to build a machine learning model that would fill colors into these black and white images intelligently. There were several techniques available to explicitly fill colors into the grayscale images. However, in order to smartly colorize the fashion mnist dataset we decided that Generative Adversarial Networks were the best choice for this task. 
 
-    The images in the fashion mnist dataset are all grayscale images.\ We decided to build a machine learning model that would fill colors into these black and white images intelligently.\ There were several techniques available to explicitly fill colors into the grayscale images.\ However, in order to smartly colorize the fashion mnist dataset we decided that Generative Adversarial Networks were the best choice for this task.
+	To build a model capable of smartly colorizing grayscale images we had to first build a dataset for training our GAN model. For this we combined the training and testing sets of the fashion mnist dataset. After this, we explicitly filled colors into these 70,000 grayscale images. Initially, the shape of each image was (28,28,1). After colorizing the images, their shape changed to (28,28,3). This marked the addition of 3 rows for each item in the dataset. This change happened to store the values of the red, blue and green elements of each image. Each label of the fashion mnist dataset was assigned different colors, for instance, ankle boots were colored brown and dresses were colored red. Now, we had 70,000 data instances each representing a colored fashion item from the fashion mnist dataset of the shape (28,28,3).
 
-    To build a model capable of smartly colorizing grayscale images we had to first build a dataset for training our GAN model.\ For this we combined the training and testing sets of the fashion mnist dataset.\ After this, we explicitly filled colors into these 70,000 grayscale images.\ Initially, the shape of each image was (28,28,1).\ After colorizing the images, their shape changed to (28,28,3).\ This marked the addition of 3 rows for each item in the dataset.\ This change happened to store the values of the red, blue and green elements of each image.\ Each label of the fashion mnist dataset was assigned different colors, for instance, ankle boots were colored brown and dresses were colored red.\ Now, we had 70,000 data instances each representing a colored fashion item from the fashion mnist dataset of the shape (28,28,3). Some instances of the explicitly colored training samples can be seen in \autoref{fig:colorization}.
-
-    \begin{figure}
-        \caption{Training samples for colorization}
-        \label{fig:colorization}
-        \centering
-        \includegraphics[scale = 0.33]{Colorization_training_samples.png}
-    \end{figure}
-
-    Once we had built our training samples, we decided to work on our GAN. We fed the generator in the network the original grayscale images from the fashion mnist dataset.\ The generator then tried to fill colors into these grayscale images of fashion items using some randomly set weights.\ These generated images were then passed on to the discriminator.\ Along with these images, the discriminator also received the explicitly colored images from the training sample.\ The discriminator tried to identify which image was created from the generator and which was drawn from the training sample.\ Based on the decision made on the classification task by the discriminator, the discriminator loss as well as the generator loss were computed.
-
-    The discriminator in the network learnt from the discriminator loss by backpropagating through the discriminator node and updating the weights associated with the discriminator.\ Similarly, the generator updated its weights using the results obtained from backpropagating through the generator node and using the generator loss.\ This process of updating the weights and learning was carried out iteratively.\ After running this iterative process for certain epochs, we had the final weights for the network that were capable of colorizing the items in the fashion mnist dataset intelligently.
     
-    We used DCGANs to define the neural network model.\ The DCGANs architecture displayed in \autoref{fig:dcgan-architecture} gives a low level overview of the model used for colorizing the grayscale images of the fashion mnist dataset. It introduces the generators and discriminators along with the training process step by step.
+	\begin{figure}[!h]
+	\begin{center}
+	\caption{Training samples for colorization}
+	\includegraphics[scale = 0.33]{Colorization_training_samples.png}
+	\end{center}
+	\end{figure}
 
-    \begin{figure}
-        \caption{DCGAN Architecture}
-        \label{fig:dcgan-architecture}
-        \includegraphics[width=9cm]{architecture.png}
-        \centering
-    \end{figure}
+	Once we had built our training samples, we decided to work on our GAN. We fed the generator in the network the original grayscale images from the fashion mnist dataset. The generator then tried to fill colors into these grayscale images of fashion items using some randomly set weights. These generated images were then passed on to the discriminator. Along with these images, the discriminator also received the explicitly colored images from the training sample. The discriminator tried to identify which image was created from the generator and which was drawn from the training sample. Based on the decision made on the classification task by the discriminator, the discriminator loss as well as the generator loss were computed. 
 
-     DCGANs use a random noise vector as input, and the input is then scaled up into two-dimensional data similar to CNN's but in the opposite structure.\ For non-linear layers, we recommend using LeakyReLU for all layers for the discriminator. For the generator, we found that the BatchNormalize layer was the optimal choice, primarily because using BatchNormalize allows the CNN version of the generator to learn better, but it is impossible to use BatchNormalize for all layers.\ The output layer of the generator and the input layer of the discriminator do not require to add BatchNormalize layer.\ 
-
-    Parameter setting for our project:
-
-    \begin{itemize}
-        \item batch size: 64
-        \item Used Adam optimizer instead of Root Mean Square Propagation optimizer
-        \item iteration times: 20000
-        \item learning rate: 0.0001
-        \item BatchNormalization: momentum=0.9
-    \end{itemize}
+	The discriminator in the network learnt from the discriminator loss by backpropagating through the discriminator node and updating the weights associated with the discriminator. Similarly, the generator updated its weights using the results obtained from backpropagating through the generator node and using the generator loss. This process of updating the weights and learning was carried out iteratively. After running this iterative process for certain epochs, we had the final weights for the network that were capable of colorizing the items in the fashion mnist dataset intelligently. 
 
     \section{Results}\label{sec:results}
 
     \subsection{Classification}\label{subsec:results-classification}
+    
+    Both classifiers had a training accuracy of 91\%, and a test accuracy around 90\%, 88\% for the dense network and 90\% for the convolutional network. This indicates we had some slight overfitting, but overall both classifiers performed well. The classifiers also seem to be fairly robust, since with an epsilon value of 0.05 we still saw a classification accuracy of 75\%. Fig~\ref{AdvPlot} shows the accuracy of our classifiers as epsilon is increased.
+    \begin{figure}[!h]
+    \begin{center}
+    \caption{Accuracy with adversarial noise}
+    \includegraphics[width=0.5\textwidth]{Second_Classifier_Architecture.png}
+    \label{AdvPlot}
+    \end{center}
+    \end{figure}
+The adversarial noise can be visually noticed with an epsilon of 0.1, so maintaining a 75\% accuracy rate when the visual noise is largely unnoticable to human observers is fairly robust. Based on the work of Goodfellow, Schlens, and Szegedy, the epsilon values at which adversarial noise effects a dataset is rather small~\cite{adversarialexamples}. Their classifier for the traditional MNIST data set produces an error rate of 89.4\% with an epsilon of 0.25, and an error rate of 87\% with an epsilon of 0.1. The difference in our accuracy compared to theirs is probably due to filtering the adversarial noise to only be on the image rather than in the black background as well. The main issues for the classifiers seem to be the similarity between some of the classes. The classifier has lower confidence in distinguishing between t-shirt and shirt, and between some sandals and ankle boots. It could be interesting to see how the classifier changes if some of these groups are joined together.
 
     \subsection{Generation}\label{subsec:results-generation}
 
-    The discriminator tends to beat the generator as many of the papers describe.
-
-    CGAN directs the learning. Compare to GAN which learns whatever will beat discriminator. The results of WGAN don't seem as high-quality, perhaps because it attempts to stabilize learning to prevent modality.
-
-    TODO: refer to \autoref{fig:generation-gan}.
-    TODO: refer to \autoref{fig:generation-cgan}.
-    TODO: refer to \autoref{fig:generation-wgan}.
-
-    TODO: refer to \autoref{fig:loss-plot-gan}.
-    TODO: refer to \autoref{fig:loss-plot-cgan}.
-    TODO: refer to \autoref{fig:loss-plot-wgan}.
-
     \begin{figure}
-        \caption{GAN Learning to Generate Clothing Images}
-        \label{fig:generation-gan}
+        \caption{ACGAN Learning to Generate Clothing Images}
+        \label{fig:results1}
         \centering
-        \subfloat[\centering Epoch 1]{{\includegraphics[width=3cm]{GAN_epoch001.png} }}
-        \subfloat[\centering Epoch 25]{{\includegraphics[width=3cm]{GAN_epoch025.png} }}
-        \subfloat[\centering Epoch 50]{{\includegraphics[width=3cm]{GAN_epoch050.png} }}
-    \end{figure}
-
-    \begin{figure}
-        \caption{CGAN Learning to Generate Clothing Images}
-        \label{fig:generation-cgan}
-        \centering
-        \subfloat[\centering Epoch 1]{{\includegraphics[width=3cm]{CGAN_epoch001.png} }}
-        \subfloat[\centering Epoch 25]{{\includegraphics[width=3cm]{CGAN_epoch025.png} }}
-        \subfloat[\centering Epoch 50]{{\includegraphics[width=3cm]{CGAN_epoch050.png} }}
-    \end{figure}
-
-    \begin{figure}
-        \caption{WGAN Learning to Generate Clothing Images}
-        \label{fig:generation-wgan}
-        \centering
-        \subfloat[\centering Epoch 1]{{\includegraphics[width=3cm]{WGAN_epoch001.png} }}
-        \subfloat[\centering Epoch 25]{{\includegraphics[width=3cm]{WGAN_epoch025.png} }}
-        \subfloat[\centering Epoch 50]{{\includegraphics[width=3cm]{WGAN_epoch050.png} }}
-    \end{figure}
-
-    \begin{figure}
-        \caption{GAN Loss Plot}
-        \label{fig:loss-plot-gan}
-        \includegraphics[width=9cm]{GAN_loss.png}
-        \centering
-    \end{figure}
-
-    \begin{figure}
-        \caption{CGAN Loss Plot}
-        \label{fig:loss-plot-cgan}
-        \includegraphics[width=9cm]{CGAN_loss.png}
-        \centering
-    \end{figure}
-
-    \begin{figure}
-        \caption{WGAN Loss Plot}
-        \label{fig:loss-plot-wgan}
-        \includegraphics[width=9cm]{WGAN_loss.png}
-        \centering
+        \subfloat[\centering Epoch 1]{{\includegraphics[width=2.5cm]{ACGAN_epoch001.png} }}
+        \subfloat[\centering Epoch 25]{{\includegraphics[width=2.5cm]{ACGAN_epoch025.png} }}
+        \subfloat[\centering Epoch 50]{{\includegraphics[width=2.5cm]{ACGAN_epoch050.png} }}
     \end{figure}
 
     \subsection{Colorization}\label{subsec:results-colorization}
 
-    TODO: Cite~\cite{e-in-style}.
-    TODO: Cite~\cite{pytorch-generative-model-collections}.
+    Here is an example of how we should cite our references~\cite{e-in-style}.
 
-    With the structure of the generative model and the discriminant model of the CNN structure provided in \autoref{fig:dcgan-architecture} and training samples similar to \autoref{fig:colorization}, the results achieved by our model can be seen in \autoref{fig:colorized_result}.
+    Here is another example of citing a reference~\cite{pytorch-generative-model-collections}.
+
+    Here is an example of how we should reference our figures~\autoref{fig:loss-and-accuracy}.
+
+    Here is an example with multiple images~\autoref{fig:results1}
 
     \begin{figure}
-        \caption{GAN colorized Clothing Images}
-        \label{fig:colorized_result}
-        \includegraphics[width=9cm]{learned_result.png}
-        \centering
+        \caption{Loss and Accuracy}
+        \label{fig:loss-and-accuracy}
+        \begin{tikzpicture}
+            \begin{axis}[
+            xlabel={Epoch},
+            ylabel={Loss},
+            xmin=1, xmax=15,
+            ymin=0, ymax=1,
+            xtick={1, 3, 6, 9, 12, 15},
+            ytick={0, .25, .50, .75, 1},
+            legend style={at={(0.5,-0.2)},anchor=north},
+            ymajorgrids=true,
+            grid style=dashed,
+            ]
+                \addplot[
+                color=blue,
+                mark=square
+                ]
+                coordinates {
+                (1, 0.9415369913395908)
+                (2, 0.36347173816627926)
+                (3, 0.2858551138391097)
+                (4, 0.25580175934980315)
+                (5, 0.22619957197457552)
+                (6, 0.20731205224163002)
+                (7, 0.19158202114825448)
+                (8, 0.17376136417604154)
+                (9, 0.1625804718480342)
+                (10, 0.14612651362808216)
+                (11, 0.1379509448694686)
+                (12, 0.13010555795497364)
+                (13, 0.12118976314862569)
+                (14, 0.11594720014060537)
+                (15, 0.10928217275068164)
+                };
+                \addplot[
+                color=red,
+                mark=square
+                ]
+                coordinates {
+                (1, 0.7498944)
+                (2, 0.8532715)
+                (3, 0.8860656)
+                (4, 0.8979578)
+                (5, 0.90786415)
+                (6, 0.9164315)
+                (7, 0.9227066)
+                (8, 0.9295607)
+                (9, 0.9342024)
+                (10, 0.94093925)
+                (11, 0.94384027)
+                (12, 0.9471116)
+                (13, 0.9506346)
+                (14, 0.9530575)
+                (15, 0.9554094)
+                };
+                \addplot[
+                color=green,
+                mark=o
+                ]
+                coordinates {
+                (1, 0.7549296505749226)
+                (2, 0.7825332581996918)
+                (3, 0.4910720940679312)
+                (4, 0.357665928080678)
+                (5, 0.3090804498642683)
+                (6, 0.27299756929278374)
+                (7, 0.31170774064958096)
+                (8, 0.2485608123242855)
+                (9, 0.508794916793704)
+                (10, 0.24579987488687038)
+                (11, 0.2450892459601164)
+                (12, 0.24228437338024378)
+                (13, 0.2619198402389884)
+                (14, 0.24979994911700487)
+                (15, 0.23182532005012035)
+                };
+                \addplot[
+                color=orange,
+                mark=o
+                ]
+                coordinates {
+                (1, 0.66744876)
+                (2, 0.6575944)
+                (3, 0.79087156)
+                (4, 0.8555428)
+                (5, 0.86985517)
+                (6, 0.88613117)
+                (7, 0.8739339)
+                (8, 0.9004858)
+                (9, 0.81274575)
+                (10, 0.901945)
+                (11, 0.9038338)
+                (12, 0.9087785)
+                (13, 0.9017017)
+                (14, 0.90983397)
+                (15, 0.91657144)
+                };
+                \addplot[mark=triangle, color=purple]
+                coordinates {
+                (1, 0.23809038553127024)
+                (2, 0.23809038553127024)
+                (3, 0.23809038553127024)
+                (4, 0.23809038553127024)
+                (5, 0.23809038553127024)
+                (6, 0.23809038553127024)
+                (7, 0.23809038553127024)
+                (8, 0.23809038553127024)
+                (9, 0.23809038553127024)
+                (10, 0.23809038553127024)
+                (11, 0.23809038553127024)
+                (12, 0.23809038553127024)
+                (13, 0.23809038553127024)
+                (14, 0.23809038553127024)
+                (15, 0.23809038553127024)
+                };
+                \addplot[mark=triangle, color=black]
+                coordinates {
+                (1, 0.9196472)
+                (2, 0.9196472)
+                (3, 0.9196472)
+                (4, 0.9196472)
+                (5, 0.9196472)
+                (6, 0.9196472)
+                (7, 0.9196472)
+                (8, 0.9196472)
+                (9, 0.9196472)
+                (10, 0.9196472)
+                (11, 0.9196472)
+                (12, 0.9196472)
+                (13, 0.9196472)
+                (14, 0.9196472)
+                (15, 0.9196472)
+                };
+                \legend{Training Loss, Training Accuracy, Validation Loss, Validation Accuracy, Testing Loss, Testing Accuracy}
+            \end{axis}
+        \end{tikzpicture}
     \end{figure}
 
-     It can be clearly seen that the generated images are not as good as the black and white examples, mainly due to the difficulty in setting up the training set.\ We tried replacing too many background images and ended up using this new dataset. The generator must generate clothing images and have a valid background (retrieved from real images).\ With more training, additional training samples or some special techniques, one might be able to improve the generated images.\ However, since this is one way to use GAN to adapt to RGB images, we are delighted with the results.
-    
-    For our project, we have used DCGAN to generate colorful clothing images. One can try to change the dataset to generate images that suits their personal need, or try to modify the neural network parameters to observe different generation effects. The size of non-trainable parameters in Adam optimizer was larger than RMSprop.\ This result excludes all parameters of the discriminator.\ 
-
     \section{Conclusion}\label{sec:conclusion}
-
-    The breadth GAN architectures explored in the generative portion of the project provided broad exposure to modern trends in GAN research.
 
     \bibliographystyle{ieeetr}
     \bibliography{report}
