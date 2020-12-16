@@ -94,7 +94,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
         \caption{Samples from fashion-mnist}
         \label{fig:fashion-mnist}
         \begin{center}
-            \includegraphics[width=0.5\textwidth]{data.png}
+            \includegraphics[width=0.45\textwidth]{data.png}
         \end{center}
     \end{figure}
 
@@ -108,7 +108,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
         \caption{Samples from fashion-mnist}
         \label{fig:classification}
         \begin{center}
-            \includegraphics[width=0.5\textwidth]{classification.png}
+            \includegraphics[width=0.45\textwidth]{classification.png}
         \end{center}
     \end{figure}
 
@@ -116,21 +116,21 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     Classification was performed using two neural network architectures, one using only dense layers and another using convolutional layers.\ The first architecture, shown in~\autoref{fig:classifier-architecture-1}, flattens the 28 by 28 pixel image into a vector 784 pixels long, which is then densely connected to a 128 node layer;\ finally, the 128 node layer is densely connected to a 10 node output layer.
 
-    \begin{figure}[!h]
+    \begin{figure}
         \caption{First classifier architecture}
         \label{fig:classifier-architecture-1}
         \begin{center}
-            \includegraphics[width=0.5\textwidth]{First_Classifier_Architecture.png}
+            \includegraphics[width=0.45\textwidth]{First_Classifier_Architecture.png}
         \end{center}
     \end{figure}
 
     The second architecture, shown in~\autoref{fig:classifier-architecture-2}, scans the image with a convolutional neural network using a 5 by 5 window and 64 layers;\ the results of the first convolutional layer are then scanned by another convolutional layer with a 5 by 5 window and 128 layers.\ The final step is to flatten the layer and densely connect it to the 10 node output layer.
 
-    \begin{figure}[!h]
+    \begin{figure}
         \caption{Second classifier architecture}
         \label{fig:classifier-architecture-2}
         \begin{center}
-            \includegraphics[width=0.5\textwidth]{Second_Classifier_Architecture.png}
+            \includegraphics[width=0.45\textwidth]{Second_Classifier_Architecture.png}
         \end{center}
     \end{figure}
 
@@ -169,7 +169,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
         \caption{Training samples for colorization}
         \label{fig:colorization}
         \centering
-        \includegraphics[scale = 0.33]{Colorization_training_samples.png}
+        \includegraphics[width=0.45\textwidth]{Colorization_training_samples.png}
     \end{figure}
 
     Once we had built our training samples, we decided to work on our GAN. We fed the generator in the network the original grayscale images from the fashion mnist dataset.\ The generator then tried to fill colors into these grayscale images of fashion items using some randomly set weights.\ These generated images were then passed on to the discriminator.\ Along with these images, the discriminator also received the explicitly colored images from the training sample.\ The discriminator tried to identify which image was created from the generator and which was drawn from the training sample.\ Based on the decision made on the classification task by the discriminator, the discriminator loss as well as the generator loss were computed.
@@ -181,7 +181,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
     \begin{figure}
         \caption{DCGAN Architecture}
         \label{fig:dcgan-architecture}
-        \includegraphics[width=9cm]{architecture.png}
+        \includegraphics[width=0.45\textwidth]{architecture.png}
         \centering
     \end{figure}
 
@@ -202,10 +202,10 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
     \subsection{Classification}\label{subsec:results-classification}
 
     Both classifiers had a training accuracy of 91\%, and a test accuracy around 90\%, 88\% for the dense network and 90\% for the convolutional network.\ This indicates we had some slight overfitting, but overall both classifiers performed well.\ The classifiers also seem to be fairly robust, since with an epsilon value of 0.05 we still saw a classification accuracy of 75\%.~\autoref{fig:adversarial-noise-accuracy} shows the accuracy of our classifiers as epsilon is increased.
-    \begin{figure}[!h]
+    \begin{figure}
         \begin{center}
             \caption{Accuracy with adversarial noise}
-            \includegraphics[width=0.5\textwidth]{Adversarial Accuracy.png}
+            \includegraphics[width=0.45\textwidth]{Adversarial Accuracy.png}
             \label{fig:adversarial-noise-accuracy}
         \end{center}
     \end{figure}
@@ -225,47 +225,47 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
         \caption{GAN Generations}
         \label{fig:generation-gan}
         \centering
-        \subfloat[\centering Epoch 1]{{\includegraphics[width=3cm]{GAN_epoch001.png} }}
-        \subfloat[\centering Epoch 25]{{\includegraphics[width=3cm]{GAN_epoch025.png} }}
-        \subfloat[\centering Epoch 50]{{\includegraphics[width=3cm]{GAN_epoch050.png} }}
+        \subfloat[\centering Epoch 1]{{\includegraphics[width=0.15\textwidth]{GAN_epoch001.png} }}
+        \subfloat[\centering Epoch 25]{{\includegraphics[width=0.15\textwidth]{GAN_epoch025.png} }}
+        \subfloat[\centering Epoch 50]{{\includegraphics[width=0.15\textwidth]{GAN_epoch050.png} }}
     \end{figure}
 
     \begin{figure}
         \caption{CGAN Generations}
         \label{fig:generation-cgan}
         \centering
-        \subfloat[\centering Epoch 1]{{\includegraphics[width=3cm]{CGAN_epoch001.png} }}
-        \subfloat[\centering Epoch 25]{{\includegraphics[width=3cm]{CGAN_epoch025.png} }}
-        \subfloat[\centering Epoch 50]{{\includegraphics[width=3cm]{CGAN_epoch050.png} }}
+        \subfloat[\centering Epoch 1]{{\includegraphics[width=0.15\textwidth]{CGAN_epoch001.png} }}
+        \subfloat[\centering Epoch 25]{{\includegraphics[width=0.15\textwidth]{CGAN_epoch025.png} }}
+        \subfloat[\centering Epoch 50]{{\includegraphics[width=0.15\textwidth]{CGAN_epoch050.png} }}
     \end{figure}
 
     \begin{figure}
         \caption{WGAN Generations}
         \label{fig:generation-wgan}
         \centering
-        \subfloat[\centering Epoch 1]{{\includegraphics[width=3cm]{WGAN_epoch001.png} }}
-        \subfloat[\centering Epoch 25]{{\includegraphics[width=3cm]{WGAN_epoch025.png} }}
-        \subfloat[\centering Epoch 50]{{\includegraphics[width=3cm]{WGAN_epoch050.png} }}
+        \subfloat[\centering Epoch 1]{{\includegraphics[width=0.15\textwidth]{WGAN_epoch001.png} }}
+        \subfloat[\centering Epoch 25]{{\includegraphics[width=0.15\textwidth]{WGAN_epoch025.png} }}
+        \subfloat[\centering Epoch 50]{{\includegraphics[width=0.15\textwidth]{WGAN_epoch050.png} }}
     \end{figure}
 
     \begin{figure}
         \caption{GAN Loss Plot}
         \label{fig:loss-plot-gan}
-        \includegraphics[width=9cm]{GAN_loss.png}
+        \includegraphics[width=0.45\textwidth]{GAN_loss.png}
         \centering
     \end{figure}
 
     \begin{figure}
         \caption{CGAN Loss Plot}
         \label{fig:loss-plot-cgan}
-        \includegraphics[width=9cm]{CGAN_loss.png}
+        \includegraphics[width=0.45\textwidth]{CGAN_loss.png}
         \centering
     \end{figure}
 
     \begin{figure}
         \caption{WGAN Loss Plot}
         \label{fig:loss-plot-wgan}
-        \includegraphics[width=9cm]{WGAN_loss.png}
+        \includegraphics[width=0.45\textwidth]{WGAN_loss.png}
         \centering
     \end{figure}
 
@@ -279,7 +279,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
     \begin{figure}
         \caption{GAN colorized Clothing Images}
         \label{fig:colorized_result}
-        \includegraphics[width=9cm]{learned_result.png}
+        \includegraphics[width=0.45\textwidth]{learned_result.png}
         \centering
     \end{figure}
 
