@@ -60,7 +60,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     \section{Introduction}\label{sec:introduction}
 
-    The diverse branches of this project were made possible by the careful selection of a dataset.\ The fashion-mnist dataset was chosen specifically for its prevalence as a benchmark in recent research into neural networks.\ Its size, labels, and compatibility (with the long-established MNIST dataset) make it an ideal choice for evaluating deep neural networks (NNs) and GANs. Rather than attempt to introduce a truly groundbreaking NN architecture given the authors' limited experience, this project aims for breadth.
+    The diverse branches of this project were made possible by the careful selection of a dataset.\ The fashion-mnist dataset was chosen specifically for its prevalence as a benchmark in recent research into neural networks.\ Its size, labels, and compatibility (with the long-established MNIST dataset) make it an ideal choice for evaluating deep neural networks and GANs. Rather than attempt to introduce a truly groundbreaking architecture given the authors' limited experience, this project aims for breadth.
 
     Each subproject explores a unique research area with industrial applications which may answer the associated questions:
 
@@ -134,7 +134,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     The output layer of both architectures indicates the network's confidence that the image belongs to each of the classes, so a large value in the 0\textsuperscript{th} and 6\textsuperscript{th} nodes would indicate that the network is uncertain whether an image should be classified as a T-shirt/top or just a Shirt.\ The neural networks described were constructed using Keras and TensorFlow in Jupyter notebooks.
 
-    The robustness of the classifier was tested by adding adversarial signals to the input images.\ The adversarial signal was calculated by determining the gradient of the loss function based on the input image used.\ This allows the adversarial signal to skew the image to the closest incorrect classification.\ Once the adversarial signal was determined, it was scaled by an \(\epsilon\) value (between 0 and 1) and added to the image;\ for adding this noise the image is considered to consistent entirely of pixels that have a brightness value greater than 0.\ Limiting the noise to non-zero values means the classification isn't being skewed due to noise added in the black background portions of the image.\ Robustness was determined by comparing the accuracy of our classifiers against ever-increasing \(\epsilon\) values.
+    The robustness of the classifier was tested by adding adversarial signals to the input images.\ The adversarial signal was calculated by determining the gradient of the loss function based on the input image used.\ This allows the adversarial signal to skew the image to the closest incorrect classification.\ Once the adversarial signal was determined, it was scaled by an \(\epsilon\) value (between 0 and 1) and added to the image.\ To add the noise effectively, the image is considered to consistent entirely of pixels that have a brightness value greater than 0.\ Limiting the noise to non-zero values means the classification isn't being skewed due to noise added in the black background portions of the image.\ Robustness was determined by comparing the accuracy of our classifiers against ever-increasing \(\epsilon\) values.
 
     \subsection{Generation}\label{subsec:implementation-generation}
 
