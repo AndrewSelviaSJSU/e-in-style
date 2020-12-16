@@ -94,23 +94,29 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     \subsection{Classification}\label{subsec:implementation-classification}
 
-    Classification was performed using two neural network architectures, one using only dense layers and another using convolutional layers. The first architecture, shown in Fig~\ref{figclass1}, flattens the 28 by 28 pixel image into a vector 784 pixels long, which is then densely connected to a 128 node layer; finallly, the 128 node layer is densely connected to a 10 node output layer.
-    \begin{figure}[!h]
-    \begin{center}
-    \caption{First classifier architecture}
-    \includegraphics[width=0.5\textwidth]{First_Classifier_Architecture.png}
-    \label{figclass1}
-    \end{center}
-The second architecture, shown in Fig~\ref{figclass2}, scans the image with a convolutional neural network using a 5 by 5 window and 64 layers; the results of the first convolutional layer are then scanned by another convolutional layer with a 5 by 5 window and 128 layers. The final step is to flatten the layer and densely connect it to the 10 node output layer.
-    \begin{figure}[!h]
-    \begin{center}
-    \caption{Second classifier architecture}
-    \includegraphics[width=0.5\textwidth]{Second_Classifier_Architecture.png}
-    \label{figclass2}
-    \end{center}
-The output layer of both architectures indicates the networks confidence that the image belongs to each of the classes, so a large value in 0th node and the 6th node would indicate that the network is uncertain whether an image should be classified as a T-shirt/top or just a Shirt. The neural networks described were constructed using Keras and Tensorflow in python notebooks.
+    Classification was performed using two neural network architectures, one using only dense layers and another using convolutional layers.\ The first architecture, shown in~\autoref{fig:classifier-architecture-1}, flattens the 28 by 28 pixel image into a vector 784 pixels long, which is then densely connected to a 128 node layer;\ finally, the 128 node layer is densely connected to a 10 node output layer.
 
-    The robustness of the classifier was tested by adding adversarial signals to the input images. The adversarial signal was calculated by determining the gradient of the loss function based on the input image used. This allows the adversarial signal to skew the image to the closest incorrect classification. Once the adversarial signal was determined it was scaled by an epislon value (between 0 and 1) and added to the image; for adding this noise the image is considered to be all pixels that have a brightness value greater than 0. Limiting the noise to non-zero values means the classification isn't being skewed due to noise added in the black background portions of the image. Robustness was determined by comparing the accuracy of our classifiers against ever increasing epsilon values.
+    \begin{figure}[!h]
+        \caption{First classifier architecture}
+        \label{fig:classifier-architecture-1}
+        \begin{center}
+            \includegraphics[width=0.5\textwidth]{First_Classifier_Architecture.png}
+        \end{center}
+    \end{figure}
+
+    The second architecture, shown in~\autoref{fig:classifier-architecture-2}, scans the image with a convolutional neural network using a 5 by 5 window and 64 layers;\ the results of the first convolutional layer are then scanned by another convolutional layer with a 5 by 5 window and 128 layers.\ The final step is to flatten the layer and densely connect it to the 10 node output layer.
+
+    \begin{figure}[!h]
+        \caption{Second classifier architecture}
+        \label{fig:classifier-architecture-2}
+        \begin{center}
+            \includegraphics[width=0.5\textwidth]{Second_Classifier_Architecture.png}
+        \end{center}
+    \end{figure}
+
+    The output layer of both architectures indicates the network's confidence that the image belongs to each of the classes, so a large value in \(0^{th}\) node and the \(6^{th}\) node would indicate that the network is uncertain whether an image should be classified as a T-shirt/top or just a Shirt.\ The neural networks described were constructed using Keras and TensorFlow in Jupyter notebooks.
+
+    The robustness of the classifier was tested by adding adversarial signals to the input images.\ The adversarial signal was calculated by determining the gradient of the loss function based on the input image used.\ This allows the adversarial signal to skew the image to the closest incorrect classification.\ Once the adversarial signal was determined it was scaled by an epsilon value (between 0 and 1) and added to the image;\ for adding this noise the image is considered to be all pixels that have a brightness value greater than 0.\ Limiting the noise to non-zero values means the classification isn't being skewed due to noise added in the black background portions of the image.\ Robustness was determined by comparing the accuracy of our classifiers against ever-increasing epsilon values.
 
     \subsection{Generation}\label{subsec:implementation-generation}
 
@@ -131,13 +137,13 @@ The output layer of both architectures indicates the networks confidence that th
         \item Deep Regret Analytic GAN (DRAGAN; December 2017)~\cite{kodali2017convergence}: Calls into question the assumption that modality and quality are inversely correlated.
     \end{enumerate}
 
-    Each was trained independently on the fashion-mnist dataset for fifty epochs.\ The loss metric was tracked for each training session.\ To communicate the results of the training process more coherently, a snapshot of images produced by the generator is saved at the end of each epoch as demonstrated in \autoref{fig:results1}.\ Upon completion, each set of fifty images was compiled into a GIF to further streamline communication of the learning process.
+    Each was trained independently on the fashion-mnist dataset for fifty epochs.\ The loss metric was tracked for each training session.\ To communicate the results of the training process more coherently, a snapshot of images produced by the generator is saved at the end of each epoch as demonstrated in \autoref{fig:generation-gan}.\ Upon completion, each set of fifty images was compiled into a GIF to further streamline communication of the learning process.
 
     \subsection{Colorization}\label{subsec:implementation-colorization}
 
     The images in the fashion mnist dataset are all grayscale images.\ We decided to build a machine learning model that would fill colors into these black and white images intelligently.\ There were several techniques available to explicitly fill colors into the grayscale images.\ However, in order to smartly colorize the fashion mnist dataset we decided that Generative Adversarial Networks were the best choice for this task.
 
-    To build a model capable of smartly colorizing grayscale images we had to first build a dataset for training our GAN model.\ For this we combined the training and testing sets of the fashion mnist dataset.\ After this, we explicitly filled colors into these 70,000 grayscale images.\ Initially, the shape of each image was (28,28,1).\ After colorizing the images, their shape changed to (28,28,3).\ This marked the addition of 3 rows for each item in the dataset.\ This change happened to store the values of the red, blue and green elements of each image.\ Each label of the fashion mnist dataset was assigned different colors, for instance, ankle boots were colored brown and dresses were colored red.\ Now, we had 70,000 data instances each representing a colored fashion item from the fashion mnist dataset of the shape (28,28,3). Some instances of the explicitly colored training samples can be seen in \autoref{fig:colorization}.
+    To build a model capable of smartly colorizing grayscale images we had to first build a dataset for training our GAN model.\ For this we combined the training and testing sets of the fashion mnist dataset.\ After this, we explicitly filled colors into these 70,000 grayscale images.\ Initially, the shape of each image was (28,28,1).\ After colorizing the images, their shape changed to (28,28,3).\ This marked the addition of 3 rows for each item in the dataset.\ This change happened to store the values of the red, blue and green elements of each image.\ Each label of the fashion mnist dataset was assigned different colors, for instance, ankle boots were colored brown and dresses were colored red.\ Now, we had 70,000 data instances each representing a colored fashion item from the fashion mnist dataset of the shape (28,28,3).\ Some instances of the explicitly colored training samples can be seen in \autoref{fig:colorization}.
 
     \begin{figure}
         \caption{Training samples for colorization}
@@ -149,8 +155,8 @@ The output layer of both architectures indicates the networks confidence that th
     Once we had built our training samples, we decided to work on our GAN. We fed the generator in the network the original grayscale images from the fashion mnist dataset.\ The generator then tried to fill colors into these grayscale images of fashion items using some randomly set weights.\ These generated images were then passed on to the discriminator.\ Along with these images, the discriminator also received the explicitly colored images from the training sample.\ The discriminator tried to identify which image was created from the generator and which was drawn from the training sample.\ Based on the decision made on the classification task by the discriminator, the discriminator loss as well as the generator loss were computed.
 
     The discriminator in the network learnt from the discriminator loss by backpropagating through the discriminator node and updating the weights associated with the discriminator.\ Similarly, the generator updated its weights using the results obtained from backpropagating through the generator node and using the generator loss.\ This process of updating the weights and learning was carried out iteratively.\ After running this iterative process for certain epochs, we had the final weights for the network that were capable of colorizing the items in the fashion mnist dataset intelligently.
-    
-    We used DCGANs to define the neural network model.\ The DCGANs architecture displayed in \autoref{fig:dcgan-architecture} gives a low level overview of the model used for colorizing the grayscale images of the fashion mnist dataset. It introduces the generators and discriminators along with the training process step by step.
+
+    We used DCGANs to define the neural network model.\ The DCGANs architecture displayed in \autoref{fig:dcgan-architecture} gives a low level overview of the model used for colorizing the grayscale images of the fashion mnist dataset.\ It introduces the generators and discriminators along with the training process step by step.
 
     \begin{figure}
         \caption{DCGAN Architecture}
@@ -159,7 +165,7 @@ The output layer of both architectures indicates the networks confidence that th
         \centering
     \end{figure}
 
-     DCGANs use a random noise vector as input, and the input is then scaled up into two-dimensional data similar to CNN's but in the opposite structure.\ For non-linear layers, we recommend using LeakyReLU for all layers for the discriminator. For the generator, we found that the BatchNormalize layer was the optimal choice, primarily because using BatchNormalize allows the CNN version of the generator to learn better, but it is impossible to use BatchNormalize for all layers.\ The output layer of the generator and the input layer of the discriminator do not require to add BatchNormalize layer.\ 
+    DCGANs use a random noise vector as input, and the input is then scaled up into two-dimensional data similar to CNN's but in the opposite structure.\ For non-linear layers, we recommend using LeakyReLU for all layers for the discriminator.\ For the generator, we found that the BatchNormalize layer was the optimal choice, primarily because using BatchNormalize allows the CNN version of the generator to learn better, but it is impossible to use BatchNormalize for all layers.\ The output layer of the generator and input layer of the discriminator do not require a BatchNormalize layer.\
 
     Parameter setting for our project:
 
@@ -174,22 +180,22 @@ The output layer of both architectures indicates the networks confidence that th
     \section{Results}\label{sec:results}
 
     \subsection{Classification}\label{subsec:results-classification}
-    
-    Both classifiers had a training accuracy of 91\%, and a test accuracy around 90\%, 88\% for the dense network and 90\% for the convolutional network. This indicates we had some slight overfitting, but overall both classifiers performed well. The classifiers also seem to be fairly robust, since with an epsilon value of 0.05 we still saw a classification accuracy of 75\%. Fig~\ref{AdvPlot} shows the accuracy of our classifiers as epsilon is increased.
+
+    Both classifiers had a training accuracy of 91\%, and a test accuracy around 90\%, 88\% for the dense network and 90\% for the convolutional network.\ This indicates we had some slight overfitting, but overall both classifiers performed well.\ The classifiers also seem to be fairly robust, since with an epsilon value of 0.05 we still saw a classification accuracy of 75\%.~\autoref{fig:adversarial-noise-accuracy} shows the accuracy of our classifiers as epsilon is increased.
     \begin{figure}[!h]
-    \begin{center}
-    \caption{Accuracy with adversarial noise}
-    \includegraphics[width=0.5\textwidth]{Second_Classifier_Architecture.png}
-    \label{AdvPlot}
-    \end{center}
+        \begin{center}
+            \caption{Accuracy with adversarial noise}
+            \includegraphics[width=0.5\textwidth]{Second_Classifier_Architecture.png}
+            \label{fig:adversarial-noise-accuracy}
+        \end{center}
     \end{figure}
-The adversarial noise can be visually noticed with an epsilon of 0.1, so maintaining a 75\% accuracy rate when the visual noise is largely unnoticable to human observers is fairly robust. Based on the work of Goodfellow, Schlens, and Szegedy, the epsilon values at which adversarial noise effects a dataset is rather small~\cite{adversarialexamples}. Their classifier for the traditional MNIST data set produces an error rate of 89.4\% with an epsilon of 0.25, and an error rate of 87\% with an epsilon of 0.1. The difference in our accuracy compared to theirs is probably due to filtering the adversarial noise to only be on the image rather than in the black background as well. The main issues for the classifiers seem to be the similarity between some of the classes. The classifier has lower confidence in distinguishing between t-shirt and shirt, and between some sandals and ankle boots. It could be interesting to see how the classifier changes if some of these groups are joined together.
+    The adversarial noise can be visually noticed with an epsilon of 0.1, so maintaining a 75\% accuracy rate when the visual noise is largely unnoticeable to human observers is fairly robust.\ Based on the work of Goodfellow, Schlens, and Szegedy, the epsilon values at which adversarial noise effects a dataset is rather small~\cite{adversarialexamples}.\ Their classifier for the traditional MNIST data set produces an error rate of 89.4\% with an epsilon of 0.25, and an error rate of 87\% with an epsilon of 0.1.\ The difference in our accuracy compared to theirs is probably due to filtering the adversarial noise to only be on the image rather than in the black background as well.\ The main issues for the classifiers seem to be the similarity between some of the classes.\ The classifier has lower confidence in distinguishing between t-shirt and shirt, and between some sandals and ankle boots.\ It could be interesting to see how the classifier changes if some of these groups are joined together.
 
     \subsection{Generation}\label{subsec:results-generation}
 
     The discriminator tends to beat the generator as many of the papers describe.
 
-    CGAN directs the learning. Compare to GAN which learns whatever will beat discriminator. The results of WGAN don't seem as high-quality, perhaps because it attempts to stabilize learning to prevent modality.
+    CGAN directs the learning.\ Compare to GAN which learns whatever will beat discriminator.\ The results of WGAN don't seem as high-quality, perhaps because it attempts to stabilize learning to prevent modality.
 
     TODO: refer to \autoref{fig:generation-gan}.
     TODO: refer to \autoref{fig:generation-cgan}.
@@ -200,7 +206,7 @@ The adversarial noise can be visually noticed with an epsilon of 0.1, so maintai
     TODO: refer to \autoref{fig:loss-plot-wgan}.
 
     \begin{figure}
-        \caption{GAN Learning to Generate Clothing Images}
+        \caption{GAN Generations}
         \label{fig:generation-gan}
         \centering
         \subfloat[\centering Epoch 1]{{\includegraphics[width=3cm]{GAN_epoch001.png} }}
@@ -209,7 +215,7 @@ The adversarial noise can be visually noticed with an epsilon of 0.1, so maintai
     \end{figure}
 
     \begin{figure}
-        \caption{CGAN Learning to Generate Clothing Images}
+        \caption{CGAN Generations}
         \label{fig:generation-cgan}
         \centering
         \subfloat[\centering Epoch 1]{{\includegraphics[width=3cm]{CGAN_epoch001.png} }}
@@ -218,7 +224,7 @@ The adversarial noise can be visually noticed with an epsilon of 0.1, so maintai
     \end{figure}
 
     \begin{figure}
-        \caption{WGAN Learning to Generate Clothing Images}
+        \caption{WGAN Generations}
         \label{fig:generation-wgan}
         \centering
         \subfloat[\centering Epoch 1]{{\includegraphics[width=3cm]{WGAN_epoch001.png} }}
@@ -261,9 +267,9 @@ The adversarial noise can be visually noticed with an epsilon of 0.1, so maintai
         \centering
     \end{figure}
 
-     It can be clearly seen that the generated images are not as good as the black and white examples, mainly due to the difficulty in setting up the training set.\ We tried replacing too many background images and ended up using this new dataset. The generator must generate clothing images and have a valid background (retrieved from real images).\ With more training, additional training samples or some special techniques, one might be able to improve the generated images.\ However, since this is one way to use GAN to adapt to RGB images, we are delighted with the results.
-    
-    For our project, we have used DCGAN to generate colorful clothing images. One can try to change the dataset to generate images that suits their personal need, or try to modify the neural network parameters to observe different generation effects. The size of non-trainable parameters in Adam optimizer was larger than RMSprop.\ This result excludes all parameters of the discriminator.\ 
+    It can be clearly seen that the generated images are not as good as the black and white examples, mainly due to the difficulty in setting up the training set.\ We tried replacing too many background images and ended up using this new dataset.\ The generator must generate clothing images and have a valid background (retrieved from real images).\ With more training, additional training samples or some special techniques, one might be able to improve the generated images.\ However, since this is one way to use GAN to adapt to RGB images, we are delighted with the results.
+
+    For our project, we have used DCGAN to generate colorful clothing images.\ One can try to change the dataset to generate images that suits their personal need, or try to modify the neural network parameters to observe different generation effects.\ The size of non-trainable parameters in Adam optimizer was larger than RMSprop.\ This result excludes all parameters of the discriminator.\
 
     \section{Conclusion}\label{sec:conclusion}
 
