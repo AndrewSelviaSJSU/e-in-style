@@ -193,17 +193,13 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     \subsection{Generation}\label{subsec:results-generation}
 
-    The discriminator tends to beat the generator as many of the papers describe.
+    The results of the original implementation were fully replicated.\ The presentation we delivered contains all of our results;\ a select few have been selected for this report.
 
-    CGAN directs the learning.\ Compare to GAN which learns whatever will beat discriminator.\ The results of WGAN don't seem as high-quality, perhaps because it attempts to stabilize learning to prevent modality.
+    After reading the ten papers in which these architectures are described, we could interpret the results more astutely.\ For instance, a common problem articulated by many of the papers is the challenge of training stability.\ They describe the fragility of the balance that exists between the discriminator and generator.\ Many of the papers specifically focus on ways to synchronize their learning, so the discriminator doesn't outpace the generator too early.\ The plots all tell that story;\ the discriminator's loss always improves faster than the generator.\ Notably, however, the research into training stability can be visually seen.\ In \autoref{fig:loss-plot-wgan}, the more modern WGAN keeps the discriminator and generator in balance rather than allowing them to diverge as with the original GAN shown in \autoref{fig:loss-plot-gan} or CGAN shown in \autoref{fig:loss-plot-cgan}.
 
-    TODO: refer to \autoref{fig:generation-gan}.
-    TODO: refer to \autoref{fig:generation-cgan}.
-    TODO: refer to \autoref{fig:generation-wgan}.
+    Another interesting observation manifest in the results is that GANs can learn to model specific classes.\ The original GAN does not constrain its generator to a particular output class, therefore it can be observed to shift its output based on the likelihood of fooling the discriminator in \autoref{fig:generation-gan};\ look specifically at the image directly to the right of the top-left corner (i.e.\ row 0, column 1) to see the generator switch from producing a Shirt to a Bag.\ In contrast, CGAN permits learning only on specified classes.\ Each column of \autoref{fig:generation-cgan} holds predictions in a distinct output class.
 
-    TODO: refer to \autoref{fig:loss-plot-gan}.
-    TODO: refer to \autoref{fig:loss-plot-cgan}.
-    TODO: refer to \autoref{fig:loss-plot-wgan}.
+    Between \autoref{fig:generation-gan}, \autoref{fig:generation-cgan}, and \autoref{fig:generation-wgan}, it seems the most recent (WGAN) actually produces the lowest quality predictions.\ Why?\ We suspect that its attempts to avoid mode collapse (the tendency for a GAN's predictions pool increasingly around a few high-confidence output classes) come at the cost of granularity.\ Of course, the DRAGAN authors would disagree.\ Ultimately, we need to perform additional research to understand this property of GANs better.
 
     \begin{figure}
         \caption{GAN Generations}
@@ -273,7 +269,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     \section{Conclusion}\label{sec:conclusion}
 
-    The breadth GAN architectures explored in the generative portion of the project provided broad exposure to modern trends in GAN research.
+    As evidenced by the diverse branches this project explored, neural networks are largely deserving of the hype they receive.\ We successfully leveraged them to perform multi-class classification and generative modeling over fashion-mnist.\ Furthermore, the breadth of GAN architectures provided broad exposure to modern research trends and problems GANs still face.\ No breakthrough theoretical discoveries were made.\ Nonetheless, our experiments and results lent us critical insight into the forces governing these techniques.
 
     \bibliographystyle{ieeetr}
     \bibliography{report}
