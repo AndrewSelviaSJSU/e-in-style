@@ -74,7 +74,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     \section{Background}\label{sec:background}
 
-    The papers which fuel this project center around the various GAN architectures that have been introduced in the past 6 years. \autoref{subsec:approach-generation} lists high-level synopses of the ten papers used in the generation component of the project.\ The other components describe their background in prose.
+    The papers which fuel the bulk of this project center around the various GAN architectures that have been introduced in the past 6 years.\ High-level synopses of the ten papers used in the generation component of the project can be found in \autoref{subsec:approach-generation}.\ The other components describe their background in prose.
 
     \section{Data}\label{sec:data}
 
@@ -213,9 +213,9 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     Each of the components utilizes its own tooling.
 
-    Classification was performed by all team members either locally on their computers (PC and Mac) or in Google CoLab.\ The provided implementation leverages Keras APIs run through a Jupyter notebook.\ No changes were required to use it.\ However, the adversarial noise experiments did require customization as can be seen in "Color Generator, Classifier, and Adversarial.ipynb" on GitHub~\cite{e-in-style}.
+    Classification was performed by all team members either locally on their computers (PC and Mac) or in Google CoLab.\ The provided implementation leverages Keras APIs run through a Jupyter notebook.\ No changes were required to use it.\ However, the adversarial noise experiments did require customization as can be seen in ``Color Generator, Classifier, and Adversarial.ipynb'' on GitHub~\cite{e-in-style}.
 
-    Generation was initially performed by Andrew locally as a Jupyter notebook, but long training times due to the lack of a GPU spurred him to get the code running elsewhere.\ His first experiment proved the code could work on a Google Cloud Platform node with a GPU, drastically reducing training times.\ After additional modifications, the app became capable of running on the SJSU HPC which offered fast training times at no cost.\ The PyTorch implementation and documentation for running the app on the HPC can be browsed on GitHub~\cite{pytorch-generative-model-collections}.
+    Generation was initially performed locally as a Jupyter notebook, but long training times due to the lack of a GPU spurred changes.\ First, the notebook was adapted into an application that could work on a Google Cloud Platform node with a GPU, drastically reducing training times.\ After additional modifications, the app became capable of running on the SJSU HPC which offered fast training times at no cost.\ The PyTorch implementation and documentation for running the app on the HPC can be browsed on GitHub~\cite{pytorch-generative-model-collections}.
 
     Colorization was performed locally and in Google CoLab.\ The same notebook used for classification was used to experiment with colorization.\ It uses Keras to construct the DCGAN\@.
 
@@ -239,7 +239,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     The results of the original implementation were fully replicated for all ten GANs.\ A select few are highlighted in this paper, but the associated presentation contains the rest.
 
-    After reading the papers in which these architectures are described, their unique properties became apparent in the results.\ For instance, a common problem articulated by many of the papers is the challenge of training stability.\ They describe the fragility of the balance that exists between the discriminator and generator.\ Recent advances focus on ways to synchronize their learning, so the discriminator doesn't outpace the generator too early.\ The plots all tell that story;\ the discriminator's loss always descends faster than the generator's.\ Recent research has largely focused on training stability.\ For instance, WGAN keeps the discriminator and generator losses in balance during training as can be seen in \autoref{fig:loss-plot-wgan}.\ In contrast, the losses for the original GAN shown in \autoref{fig:loss-plot-gan} and CGAN shown in \autoref{fig:loss-plot-cgan} clearly diverge.
+    After reading the papers in which these architectures are described, their unique properties became apparent in the results.\ For instance, a common problem articulated by many of the papers is the challenge of training stability.\ They describe the fragility of the balance that exists between the discriminator and generator.\ Recent advances focus on ways to synchronize their learning, so the discriminator doesn't outpace the generator too early.\ The plots all tell that story;\ the discriminator's loss always ends lower than the generator's.\ As a result, recent research has largely focused on training stability.\ For instance, WGAN keeps the discriminator and generator losses in balance during training as can be seen in \autoref{fig:loss-plot-wgan}.\ In contrast, the losses for the original GAN shown in \autoref{fig:loss-plot-gan} and CGAN shown in \autoref{fig:loss-plot-cgan} clearly diverge.
 
     Another interesting observation manifest in the results is that GANs can learn to model specific classes.\ The original GAN does not constrain its generator to a particular output class, therefore it can be observed to shift its output based on the likelihood of fooling the discriminator.\ In \autoref{fig:generation-gan},\ look specifically at the image directly to the right of the top-left corner (i.e.\ row 0, column 1) to see the generator switch from producing a Shirt to a Bag.\ In contrast, CGAN permits learning only on specified classes.\ Each column of \autoref{fig:generation-cgan} holds predictions in a distinct output class.
 
@@ -295,8 +295,6 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     \subsection{Colorization}\label{subsec:results-colorization}
 
-    The colorized images produced by DCGAN can be seen in \autoref{fig:colorized_result}.
-
     \begin{figure}
         \caption{Colorized Clothing Images}
         \label{fig:colorized_result}
@@ -304,7 +302,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
         \centering
     \end{figure}
 
-    It can be clearly seen that the generated images are not as good as the grayscale examples due to the difficulty in setting up the training set.\ We tried replacing too many background images and ended up using this new dataset.\ The generator must generate clothing images and have a valid background (retrieved from real images).\ With more training, additional training samples, or some special techniques, one might be able to improve the generated images.
+    The colorized images produced by DCGAN can be seen in \autoref{fig:colorized_result}. It can be clearly seen that the generated images are not as good as the grayscale examples due to the difficulty in setting up the training set.\ We tried replacing too many background images and ended up using this new dataset.\ The generator must generate clothing images and have a valid background (retrieved from real images).\ With more training, additional training samples, or some special techniques, one might be able to improve the generated images.
 
     For our project, we have used DCGAN to generate colorful clothing images.\ One can try to change the dataset to generate images that suit their personal needs.\ Alternatively, modifying the neural network architecture or parameters may lead to more success in achieving realistic colorization.
 
