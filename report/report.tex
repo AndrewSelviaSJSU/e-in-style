@@ -72,6 +72,10 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     The implementations of the separate components are hosted on GitHub~\cite{e-in-style,pytorch-generative-model-collections}.
 
+    \section{Background}\label{sec:background}
+
+    The papers which fuel this project center around the various GAN architectures that have been introduced in the past 6 years. \autoref{subsec:approach-generation} lists high-level synopses of the ten papers used in the generation component of the project.\ The other components describe their background in prose.
+
     \section{Data}\label{sec:data}
 
     The fashion-mnist dataset~\cite{xiao2017/online} is composed of 60,000 training images and 10,000 testing images.\ In keeping with the legacy of the traditional MNIST, fashion-mnist images are 28x28 grayscale pixels.\ Each image is labeled as one of the ten classes pictured in \autoref{fig:fashion-mnist} and enumerated below:
@@ -98,9 +102,9 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
         \end{center}
     \end{figure}
 
-    \section{Implementation}\label{sec:implementation}
+    \section{Approach}\label{sec:approach}
 
-    \subsection{Classification}\label{subsec:implementation-classification}
+    \subsection{Classification}\label{subsec:approach-classification}
 
     \begin{figure}
         \caption{Classified fashion-mnist Testing Images}
@@ -112,7 +116,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     \autoref{fig:classification} demonstrates the classification task.\ In this example, the top row indicates the classifier has successfully classified the image into the 9\textsuperscript{th} class (Ankle Boot).\ However, the bottom image has been misclassified into the 5\textsuperscript{th} class (Sandal) rather than the 7\textsuperscript{th} class (Sneaker).
 
-    Classification was performed using two neural network architectures, one using only dense layers and another using convolutional layers.\ The first architecture, shown in~\autoref{fig:classifier-architecture-1}, flattens the 28x28 pixel image into a 784-pixel vector which is then densely connected to a 128-node layer;\ finally, the 128-node layer is densely connected to a 10-node output layer.
+    The classification task was able to leverage an existing implementation provided in the official TensorFlow documentation of Keras~\cite{basic-classification-classify-images-of-clothing}.\ Training was performed using two neural network architectures;\ one used only dense layers and another used convolutional layers.\ The first architecture, shown in~\autoref{fig:classifier-architecture-1}, flattens the 28x28 pixel image into a 784-pixel vector which is then densely connected to a 128-node layer;\ finally, the 128-node layer is densely connected to a 10-node output layer.
 
     \begin{figure}
         \caption{First Classifier Architecture}
@@ -136,7 +140,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     The robustness of the classifier was tested by adding adversarial signals to the input images.\ The adversarial signal was calculated by determining the gradient of the loss function based on the input image used.\ This allows the adversarial signal to skew the image to the closest incorrect classification.\ Once the adversarial signal was determined, it was scaled by an \(\epsilon\) value (between 0 and 1) and added to the image.\ To add the noise effectively, the image is considered to consist entirely of pixels that have a brightness value greater than 0.\ Limiting the noise to non-zero values means the classification isn't being skewed due to noise added in the black background portions of the image.\ Robustness was determined by comparing the accuracy of our classifiers against ever-increasing \(\epsilon\) values.
 
-    \subsection{Generation}\label{subsec:implementation-generation}
+    \subsection{Generation}\label{subsec:approach-generation}
 
     A key goal from the onset of this project was to use GANs to generate images which are believable reproductions of those in fashion-mnist.\ During the planning stage, various projects which achieved the goal were identified as references.\ Two stood out above the rest: tensorflow-generative-model-collections~\cite{tensorflow-generative-model-collections} and pytorch-generative-model-collections~\cite{original-pytorch-generative-model-collections}.\ Both take the same approach of training ten different GANs on various datasets, including fashion-mnist.\ The PyTorch implementation proved easier to execute on the SJSU HPC due to its more modern dependency stack, therefore it was chosen as the foundation of the generative component of this project.
 
@@ -167,7 +171,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
 
     The code associated with the generation component of this project is hosted on GitHub~\cite{pytorch-generative-model-collections}.\ Pay special attention to the instructions for executing the application on the SJSU HPC\@.
 
-    \subsection{Colorization}\label{subsec:implementation-colorization}
+    \subsection{Colorization}\label{subsec:approach-colorization}
 
     The images in the fashion-mnist dataset are all grayscale images.\ We decided to build a machine learning model that would fill colors into these grayscale images intelligently.\ There exist several techniques available to fill static colors into them;\ however, our goal is to have the model learn to color the images intelligently.\ We decided to use GANs~\cite{colorization_GAN} to perform this task.
 
@@ -204,6 +208,16 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
         \item Learning rate: 0.0001
         \item BatchNormalization momentum: 0.9
     \end{itemize}
+
+    \section{Tooling}\label{sec:tools}
+
+    Each of the components utilizes its own tooling.
+
+    Classification was performed by all team members either locally on their computers (PC and Mac) or in Google CoLab.\ The provided implementation leverages Keras APIs run through a Jupyter notebook.\ No changes were required to use it.\ However, the adversarial noise experiments did require customization as can be seen in "Color Generator, Classifier, and Adversarial.ipynb" on GitHub~\cite{e-in-style}.
+
+    Generation was initially performed by Andrew locally as a Jupyter notebook, but long training times due to the lack of a GPU spurred him to get the code running elsewhere.\ His first experiment proved the code could work on a Google Cloud Platform node with a GPU, drastically reducing training times.\ After additional modifications, the app became capable of running on the SJSU HPC which offered fast training times at no cost.\ The PyTorch implementation and documentation for running the app on the HPC can be browsed on GitHub~\cite{pytorch-generative-model-collections}.
+
+    Colorization was performed locally and in Google CoLab.\ The same notebook used for classification was used to experiment with colorization.\ It uses Keras to construct the DCGAN\@.
 
     \section{Results}\label{sec:results}
 
@@ -297,6 +311,17 @@ T\kern-.1667em\lower.7ex\hbox{E}\ker,n-.125emX}}
     \section{Conclusion}\label{sec:conclusion}
 
     As evidenced by the diverse branches this project explored, neural networks offer a wide surface area of applications.\ We successfully leveraged them to perform multi-class classification and generative modeling over fashion-mnist.\ Furthermore, we explored a breadth of GAN architectures.\ These provided broad exposure to modern research trends and problems GANs still face.\ No breakthrough theoretical discoveries were made;\ nonetheless, our experiments and results lent us critical insight into the forces governing these techniques.
+
+    \section{Contributions}\label{sec:contributions}
+
+    For more information regarding a specific portion of the project, direct communication to the responsible individuals:
+
+    \begin{enumerate}
+        \item Classification: Charlie Brayton, Andrew Selvia
+        \item Adversarial Noise: Charlie Brayton
+        \item Generation: Andrew Selvia
+        \item Colorization: Mohit Patel, Dylan Zhang, Charlie Brayton
+    \end{enumerate}
 
     \bibliographystyle{ieeetr}
     \bibliography{report}
